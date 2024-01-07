@@ -16,9 +16,11 @@ class UDPSock:
     Class forked / modified from 
     https://github.com/bashkirtsevich-llc/aioudp
     """
-    def __init__(self, addr='', port=0, loop=None, datagram_received=None):
+    def __init__(self, addr='', port=0, loop=None, datagram_received=None, enable_broadcast=False):
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        if enable_broadcast:
+            self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self._sock.setblocking(False)
 
         self._send_event = asyncio.Event()
@@ -241,7 +243,7 @@ class Handler:
         logging.info(f"Client{client.websocket.remote_address} left")
 
 
-async def run(udp_addr, websocket_addr, websocket_port, fwd_addr=None):
+async def run(udp_addr, websocket_addr, websocket_port, fwd_addr=None, enable_broadcast=False):
     handler = Handler(fwd_addr)
     ws_server = await websockets.serve(handler.ws2udp_handler, websocket_addr, websocket_port)
 
@@ -249,5 +251,5 @@ async def run(udp_addr, websocket_addr, websocket_port, fwd_addr=None):
         for client in clients:
             client.send_ws(message)
 
-    udp_server = UDPSock(*udp_addr, datagram_received=send_broadcast)  
+    udp_server = UDPSock(*udp_addr, datagram_received=send_broadcast, enable_broadcast=enable_broadcast)  
     await ws_server.server.serve_forever()

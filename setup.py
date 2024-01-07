@@ -10,7 +10,7 @@ setup(name='ws2udp',
       description='A WebSocket to UDP proxy',
       long_description=long_description,
       long_description_content_type="text/markdown",
-      url="https://github.com/bgola/ws2udp",
+      url="https://github.com/grrrr/ws2udp",
       packages=find_namespace_packages(include=['ws2udp']),
 	  classifiers=[
           "Programming Language :: Python :: 3",

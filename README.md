@@ -28,6 +28,7 @@ optional arguments:
   --fwd-addr FWD_ADDR  Address of the UDP target for messages (default=localhost)
   --fwd-port FWD_PORT  Port of the UDP target (default=57143)
   --addr ADDR          WebSocket address to listen (default=0.0.0.0)
+  --broadcast          Enable UDP broadcasting
   --port PORT          WebSocket port to listen (default=8765)
   --quiet              No verbose output
 ```
